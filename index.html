@@ -152,8 +152,7 @@
     // ============================================================================
     const OBRA_VIDEOS = {
         "NOVO NORDISK - UB SP": "assets/videos/novo_nordiks_ubsp.mp4",
-        // "NOVO NORDISK - AP": "https://...",
-        // "HITACHI": "https://...",
+        // "HITACHI": "assets/videos/hitachi.mp4",
     };
 
     function ObraCard({ obra, onClick }) {
@@ -247,9 +246,13 @@
         return (
             <div className="min-h-screen flex flex-col screen-enter" style={{ background: 'linear-gradient(160deg, #080c14 0%, #0d1525 100%)' }}>
                 <div className="header-glow px-10 py-6 flex justify-between items-center flex-shrink-0">
-                    <div>
-                        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 13, letterSpacing: '0.2em', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase' }}>MSE Engenharia</div>
-                        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 32, fontWeight: 800, color: 'white', lineHeight: 1.1 }}>Visão por Obras</div>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+                        <img src="assets/images/mselogo.png" alt="MSE Logo" style={{ height: '45px', width: 'auto', objectFit: 'contain' }} />
+                        <div style={{ width: 2, height: 30, background: 'rgba(255,255,255,0.1)' }} />
+                        <div>
+                            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 13, letterSpacing: '0.2em', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase' }}>MSE Engenharia</div>
+                            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 32, fontWeight: 800, color: 'white', lineHeight: 1.1 }}>Visão por Obras</div>
+                        </div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                         <button onClick={onOpenRanking} style={{
@@ -845,6 +848,11 @@
                             <IconHome size={16} /> Menu
                         </button>
                         <div style={{ width: 1, height: 24, background: 'rgba(255,255,255,0.08)' }} />
+                        
+                        {/* INCLUSÃO DA LOGO AQUI */}
+                        <img src="assets/images/mselogo.png" alt="MSE Logo" style={{ height: '35px', width: 'auto', objectFit: 'contain' }} />
+                        <div style={{ width: 1, height: 24, background: 'rgba(255,255,255,0.08)' }} />
+
                         <div>
                             <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 11, letterSpacing: '0.2em', color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase' }}>
                                 Visão Integrada
