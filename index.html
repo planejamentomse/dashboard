@@ -153,7 +153,11 @@
     // ============================================================================
     const OBRA_VIDEOS = {
         "NOVO NORDISK - UB SP": "assets/videos/novo_nordiks_ubsp.mp4",
-        // "HITACHI": "assets/videos/hitachi.mp4",
+        "NOVO NORDISK - AP": "assets/videos/novo_nordisk_ap.mp4",
+    //    "HITACHI": "assets/videos/hitachi.mp4",
+    //    "CNPEM - AUDITÓRIO": "assets/videos/auditorio.mp4",
+    //    "CNPEM - FASEADO": "assets/videos/faseado.mp4",
+    //    "NOVO NORDISK - REFORÇO AP": "assets/videos/reforco.mp4"
     };
 
     function ObraCard({ obra, onClick }) {
@@ -1148,17 +1152,12 @@
         return (
             <div ref={containerRef} className="obra-enter" style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '10px 20px', gap: 10, overflow: 'hidden' }}>
                 
-                {/* Header - Com botões de navegação */}
                 <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 16px', background: 'rgba(255,255,255,0.03)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.08)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                         <IconPin size={20} style={{ color: '#a78bfa' }} />
                         <div style={{ fontSize: 18, fontWeight: 700, color: 'white', fontFamily: "'Barlow Condensed'", textTransform: 'uppercase' }}>Mapa de Suprimentos</div>
                     </div>
-                    
-                    <div style={{ display: 'flex', gap: 8 }}>
-                        <button onClick={onScrollUp} style={{ background: 'rgba(255,255,255,0.05)', border: 'none', color: 'rgba(255,255,255,0.5)', padding: '6px 12px', borderRadius: 8, cursor: 'pointer', fontSize: 11, fontWeight: 700 }}>CURVA S ▲</button>
-                        <button onClick={onScrollDown} style={{ background: 'rgba(255,255,255,0.05)', border: 'none', color: 'rgba(255,255,255,0.5)', padding: '6px 12px', borderRadius: 8, cursor: 'pointer', fontSize: 11, fontWeight: 700 }}>ENCARREGADOS ▼</button>
-                    </div>
+                    <button onClick={onScrollUp} style={{ background: 'rgba(255,255,255,0.05)', border: 'none', color: 'rgba(255,255,255,0.5)', padding: '6px 12px', borderRadius: 8, cursor: 'pointer', fontSize: 11, fontWeight: 700 }}>CURVA S ▲</button>
                 </div>
 
                 <div style={{ flex: 1, display: 'flex', gap: 15, minHeight: 0, overflow: 'hidden' }}>
@@ -1206,14 +1205,14 @@
                             <div style={{ flexShrink: 0, fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase' }}>
                                 {activeStatus ? `Filtro: ${activeStatus}` : 'Cronograma de Necessidades'}
                             </div>
-                            
+                            {/* AJUSTE FINAL: Container com overflow escondido e padding zerado no fim */}
                             <div style={{ flex: 1, overflowY: 'auto', paddingRight: 5, minHeight: 0 }} className="custom-scrollbar">
                                 <div style={{ 
                                     display: 'grid', 
                                     gridTemplateColumns: '1fr',
-                                    gridAutoRows: '60px', 
+                                    gridAutoRows: '60px', // Força cada linha a ter exatamente 60px
                                     gap: '8px', 
-                                    paddingBottom: '8px' 
+                                    paddingBottom: '8px' // Gap final para compensar o último item
                                 }}>
                                     {itensExibidos.map((it, i) => {
                                         const dias = it._dias;
@@ -1282,21 +1281,23 @@
                 supervisorMap[resp].metaTotal += meta; supervisorMap[resp].avancoTotal += avanco;
                 if (dataYMD) supervisorMap[resp].diasApontados.add(dataYMD);
             });
+            // Denominador: dias do período (seteDiasAtras até ontem inclusive) que não são fim de semana
             let totalDias = 0;
             for (let i = 0; i < 7; i++) {
                 const d = new Date(seteDiasAtras); d.setDate(seteDiasAtras.getDate() + i);
-                if (d > ontem) break; 
+                if (d > ontem) break; // não conta dias além de ontem
                 if (d.getDay() !== 0 && d.getDay() !== 6) totalDias++;
             }
             totalDias = totalDias || 1;
             const arr = Object.values(supervisorMap).map(s => {
                 const aderencia = s.metaTotal > 0 ? (s.avancoTotal / s.metaTotal) * 100 : 0;
+                // Numerador: dias apontados; se apontou num domingo ou sábado, conta no numerador E no denominador
                 let diasNumerador = 0;
                 let denominadorExtra = 0;
                 s.diasApontados.forEach(dataYMD => {
                     const dt = new Date(dataYMD + 'T12:00:00');
                     diasNumerador++;
-                    if (dt.getDay() === 0 || dt.getDay() === 6) denominadorExtra++; 
+                    if (dt.getDay() === 0 || dt.getDay() === 6) denominadorExtra++; // domingo ou sábado com apontamento entra no denom
                 });
                 const assiduidade = (diasNumerador / (totalDias + denominadorExtra)) * 100;
                 const score = (aderencia * 0.15) + (assiduidade * 0.85);
@@ -1311,18 +1312,17 @@
 
         return (
             <div style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '6px 20px 10px', gap: 10 }}>
-                {/* Título com Botão sem rótulo */}
+                {/* Título */}
                 <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 12, padding: '8px 14px', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.18)', borderRadius: 12 }}>
                     <IconTrophy size={16} style={{ color: '#f59e0b' }} />
                     <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 13, fontWeight: 700, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>
                         Performance de Encarregados
                     </div>
-                    {/* Botão apenas com ícone para evitar conflito de nomes */}
-                    <button onClick={onScrollUp} style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center', width: 32, height: 32, borderRadius: 8, background: 'rgba(255,255,255,0.05)', border: 'none', cursor: 'pointer', color: 'rgba(255,255,255,0.35)' }}>
-                        <IconChevU size={18} />
+                    <button onClick={onScrollUp} style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'rgba(255,255,255,0.35)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: '0.1em' }}>
+                        <IconChevU size={14} /> CURVA S
                     </button>
                 </div>
-
+                {/* KPIs */}
                 <div style={{ flexShrink: 0, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, height: 100 }}>
                     <div style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', borderRadius: 14, padding: '10px 16px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative', overflow: 'hidden' }}>
                         <IconTrophy size={70} style={{ position: 'absolute', right: -10, bottom: -10, color: 'rgba(255,255,255,0.12)' }} />
@@ -1347,7 +1347,7 @@
                         <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 42, fontWeight: 900, color: '#10b981', lineHeight: 1 }}>{assiduidadeGlobal.toFixed(1)}%</div>
                     </div>
                 </div>
-
+                {/* Tabela */}
                 <div style={{ flex: 1, minHeight: 0, borderRadius: 14, overflow: 'hidden', display: 'flex', flexDirection: 'column', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
                     <div style={{ overflowY: 'auto', flex: 1 }} className="custom-scrollbar">
                         <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
