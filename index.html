@@ -165,12 +165,11 @@
         const mediaUrl = OBRA_VIDEOS[obra.nome] || null;
         const videoRef = React.useRef(null);
 
-        // Verifica se a URL aponta para uma imagem comum
         const isImage = mediaUrl && /\.(jpg|jpeg|png|webp|avif|gif|svg)$/.test(mediaUrl.toLowerCase());
 
         React.useEffect(() => {
             const v = videoRef.current;
-            if (!v || isImage) return; // Se for imagem ou não houver vídeo, não faz nada
+            if (!v || isImage) return; 
             v.muted = true;
             v.play().catch(() => {});
         }, [mediaUrl, isImage]);
@@ -188,12 +187,11 @@
                 transition: 'all 0.3s ease',
                 padding: '1.5rem',
                 display: 'flex', flexDirection: 'column', gap: '0.75rem',
-                minHeight: '180px', height: '100%',
+                minHeight: '200px', height: '100%', width: '100%', boxSizing: 'border-box'
             }}
             onMouseEnter={e => { e.currentTarget.style.transform='translateY(-4px)'; e.currentTarget.style.boxShadow=`0 12px 40px ${cor}30`; e.currentTarget.style.borderColor=`${cor}66`; }}
             onMouseLeave={e => { e.currentTarget.style.transform=''; e.currentTarget.style.boxShadow=`0 0 30px ${cor}14`; e.currentTarget.style.borderColor=`${cor}33`; }}>
 
-                {/* Mídia de fundo: Detecta se é imagem ou vídeo */}
                 {mediaUrl && (
                     isImage ? (
                         <img 
@@ -218,7 +216,6 @@
                     )
                 )}
 
-                {/* Overlay escuro com gradiente na cor do desvio */}
                 {mediaUrl && (
                     <div style={{
                         position: 'absolute', inset: 0, zIndex: 1,
@@ -226,19 +223,17 @@
                     }} />
                 )}
 
-                {/* Barra lateral colorida */}
                 <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 5, background: cor, boxShadow: `0 0 12px ${cor}88`, zIndex: 2 }} />
 
-                {/* Ícone de Pin */}
-                <div style={{ position: 'relative', zIndex: 2, color: cor, background: mediaUrl ? `${corBg}0.18)` : `${corBg}0.12)`, width: 48, height: 48, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, backdropFilter: mediaUrl ? 'blur(4px)' : 'none', border: mediaUrl ? `1px solid ${cor}33` : 'none' }}>
-                    <IconPin size={24} />
+                <div style={{ position: 'relative', zIndex: 2, color: cor, background: mediaUrl ? `${corBg}0.18)` : `${corBg}0.12)`, width: 44, height: 44, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, backdropFilter: mediaUrl ? 'blur(4px)' : 'none', border: mediaUrl ? `1px solid ${cor}33` : 'none' }}>
+                    <IconPin size={22} />
                 </div>
                 
                 <div style={{ position: 'relative', zIndex: 2, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 11, letterSpacing: '0.15em', color: mediaUrl ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.35)', textTransform: 'uppercase', marginBottom: 2 }}>
                         {obra.encarregados ? 'Visão Integrada' : 'Curva S'}
                     </div>
-                    <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 'clamp(20px, 2.2vw, 26px)', fontWeight: 800, color: 'white', lineHeight: 1.1, wordBreak: 'break-word', textTransform: 'uppercase', textShadow: mediaUrl ? '0 2px 12px rgba(0,0,0,0.8)' : 'none' }}>
+                    <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 'clamp(18px, 1.8vw, 24px)', fontWeight: 800, color: 'white', lineHeight: 1.1, wordBreak: 'break-word', textTransform: 'uppercase', textShadow: mediaUrl ? '0 2px 12px rgba(0,0,0,0.8)' : 'none' }}>
                         {obra.nome}
                     </div>
                 </div>
@@ -250,7 +245,7 @@
                             {obra.encarregados && <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', color: '#f59e0b', background: 'rgba(245,158,11,0.15)', border: '1px solid rgba(245,158,11,0.3)', padding: '2px 7px', borderRadius: 5, textTransform: 'uppercase', backdropFilter: 'blur(4px)' }}>Encarregados</span>}
                             {obra.suprimentos?.length > 0 && <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', color: '#a78bfa', background: 'rgba(167,139,250,0.15)', border: '1px solid rgba(167,139,250,0.3)', padding: '2px 7px', borderRadius: 5, textTransform: 'uppercase', backdropFilter: 'blur(4px)' }}>Suprimentos</span>}
                         </div>
-                        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 'clamp(18px, 2vw, 22px)', fontWeight: 900, color: cor, textShadow: mediaUrl ? `0 0 20px ${cor}` : 'none' }}>
+                        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 'clamp(16px, 1.8vw, 20px)', fontWeight: 900, color: cor, textShadow: mediaUrl ? `0 0 20px ${cor}` : 'none' }}>
                             {desvio > 0 ? '+' : ''}{(desvio * 100).toFixed(1)}%
                         </div>
                     </div>
@@ -266,6 +261,7 @@
 
     function ObrasGridScreen({ obras, onSelectObra, onOpenRanking }) {
         return (
+            // CORREÇÃO AQUI: Retornei o min-h-screen para evitar que a tela colapse com 0px de altura
             <div className="min-h-screen flex flex-col screen-enter" style={{ background: 'linear-gradient(160deg, #080c14 0%, #0d1525 100%)' }}>
                 <div className="header-glow px-6 md:px-10 py-4 md:py-6 flex justify-between items-center flex-shrink-0">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
@@ -293,10 +289,15 @@
                         <Clock />
                     </div>
                 </div>
-                {/* Alterados os paddings e classes da Grade para melhor adaptação de altura e largura */}
+                
                 <div className="flex-1 overflow-y-auto custom-scrollbar px-6 md:px-10 pb-6 md:pb-8 pt-4 md:pt-6">
-                    {/* Alterado: Adicionados auto-rows-fr e breakpoints xl e 2xl para telas grandes */}
-                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-6 auto-rows-fr h-full">
+                    {/* Mantivemos o grid fluido para lidar bem com TVs sem cortar nas laterais */}
+                    <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
+                        gap: '24px',
+                        alignItems: 'stretch'
+                    }}>
                         {obras.map((obra, index) => (
                             <ObraCard key={obra.nome} obra={obra} onClick={() => onSelectObra(index)} />
                         ))}
