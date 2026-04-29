@@ -155,7 +155,7 @@
         "NOVO NORDISK - UB SP": "assets/videos/novo_nordiks_ubsp.mp4",
         "NOVO NORDISK - AP": "assets/videos/novo_nordisk_ap.mp4",
     //    "HITACHI": "assets/videos/hitachi.mp4",
-        "CNPEM - AUDITÓRIO": "assets/videos/auditorio.mp4",
+        "CNPEM - AUDITÓRIO": "assets/images/auditorio.png",
     //    "CNPEM - FASEADO": "assets/videos/faseado.mp4",
     //    "NOVO NORDISK - REFORÇO AP": "assets/videos/reforco.mp4"
     };
@@ -182,9 +182,9 @@
                 background: videoUrl ? 'transparent' : `linear-gradient(145deg, ${corBg}0.07), rgba(255,255,255,0.01))`,
                 boxShadow: `0 0 30px ${cor}14`,
                 transition: 'all 0.3s ease',
-                padding: '28px 28px 22px',
-                display: 'flex', flexDirection: 'column', gap: 14,
-                minHeight: 200,
+                padding: '1.5rem', // Deixando o padding relativo para não quebrar a tela
+                display: 'flex', flexDirection: 'column', gap: '0.75rem',
+                minHeight: '180px', height: '100%', // Forçando o card a preencher o espaço da grade
             }}
             onMouseEnter={e => { e.currentTarget.style.transform='translateY(-4px)'; e.currentTarget.style.boxShadow=`0 12px 40px ${cor}30`; e.currentTarget.style.borderColor=`${cor}66`; }}
             onMouseLeave={e => { e.currentTarget.style.transform=''; e.currentTarget.style.boxShadow=`0 0 30px ${cor}14`; e.currentTarget.style.borderColor=`${cor}33`; }}>
@@ -215,31 +215,33 @@
                 <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 5, background: cor, boxShadow: `0 0 12px ${cor}88`, zIndex: 2 }} />
 
                 {/* Conteúdo (acima do vídeo) */}
-                <div style={{ position: 'relative', zIndex: 2, color: cor, background: videoUrl ? `${corBg}0.18)` : `${corBg}0.12)`, width: 52, height: 52, borderRadius: 13, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, backdropFilter: videoUrl ? 'blur(4px)' : 'none', border: videoUrl ? `1px solid ${cor}33` : 'none' }}>
-                    <IconPin size={26} />
+                <div style={{ position: 'relative', zIndex: 2, color: cor, background: videoUrl ? `${corBg}0.18)` : `${corBg}0.12)`, width: 48, height: 48, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, backdropFilter: videoUrl ? 'blur(4px)' : 'none', border: videoUrl ? `1px solid ${cor}33` : 'none' }}>
+                    <IconPin size={24} />
                 </div>
                 
-                <div style={{ position: 'relative', zIndex: 2, flex: 1 }}>
-                    <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 11, letterSpacing: '0.15em', color: videoUrl ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.35)', textTransform: 'uppercase', marginBottom: 4 }}>
+                <div style={{ position: 'relative', zIndex: 2, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                    <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 11, letterSpacing: '0.15em', color: videoUrl ? 'rgba(255,255,255,0.6)' : 'rgba(255,255,255,0.35)', textTransform: 'uppercase', marginBottom: 2 }}>
                         {obra.encarregados ? 'Visão Integrada' : 'Curva S'}
                     </div>
-                    <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 26, fontWeight: 800, color: 'white', lineHeight: 1.1, wordBreak: 'break-word', textTransform: 'uppercase', textShadow: videoUrl ? '0 2px 12px rgba(0,0,0,0.8)' : 'none' }}>{obra.nome}</div>
+                    <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 'clamp(20px, 2.2vw, 26px)', fontWeight: 800, color: 'white', lineHeight: 1.1, wordBreak: 'break-word', textTransform: 'uppercase', textShadow: videoUrl ? '0 2px 12px rgba(0,0,0,0.8)' : 'none' }}>
+                        {obra.nome}
+                    </div>
                 </div>
                 
                 {desvio !== null && (
-                    <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-                        <div style={{ display: 'flex', gap: 5 }}>
+                    <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8 }}>
+                        <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
                             {obra.curva && <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', color: '#10b981', background: 'rgba(16,185,129,0.15)', border: '1px solid rgba(16,185,129,0.3)', padding: '2px 7px', borderRadius: 5, textTransform: 'uppercase', backdropFilter: 'blur(4px)' }}>Curva S</span>}
                             {obra.encarregados && <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', color: '#f59e0b', background: 'rgba(245,158,11,0.15)', border: '1px solid rgba(245,158,11,0.3)', padding: '2px 7px', borderRadius: 5, textTransform: 'uppercase', backdropFilter: 'blur(4px)' }}>Encarregados</span>}
                             {obra.suprimentos?.length > 0 && <span style={{ fontSize: 9, fontWeight: 700, letterSpacing: '0.12em', color: '#a78bfa', background: 'rgba(167,139,250,0.15)', border: '1px solid rgba(167,139,250,0.3)', padding: '2px 7px', borderRadius: 5, textTransform: 'uppercase', backdropFilter: 'blur(4px)' }}>Suprimentos</span>}
                         </div>
-                        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 18, fontWeight: 900, color: cor, textShadow: videoUrl ? `0 0 20px ${cor}` : 'none' }}>
+                        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 'clamp(18px, 2vw, 22px)', fontWeight: 900, color: cor, textShadow: videoUrl ? `0 0 20px ${cor}` : 'none' }}>
                             {desvio > 0 ? '+' : ''}{(desvio * 100).toFixed(1)}%
                         </div>
                     </div>
                 )}
                 
-                <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: 6, color: cor, fontSize: 13, fontWeight: 600 }}>
+                <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: 6, color: cor, fontSize: 13, fontWeight: 600, marginTop: 'auto' }}>
                     <span>Acessar</span>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6"/></svg>
                 </div>
@@ -250,13 +252,13 @@
     function ObrasGridScreen({ obras, onSelectObra, onOpenRanking }) {
         return (
             <div className="min-h-screen flex flex-col screen-enter" style={{ background: 'linear-gradient(160deg, #080c14 0%, #0d1525 100%)' }}>
-                <div className="header-glow px-10 py-6 flex justify-between items-center flex-shrink-0">
+                <div className="header-glow px-6 md:px-10 py-4 md:py-6 flex justify-between items-center flex-shrink-0">
                     <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
                         <img src="assets/images/mselogo.png" alt="MSE Logo" style={{ height: '45px', width: 'auto', objectFit: 'contain' }} />
                         <div style={{ width: 2, height: 30, background: 'rgba(255,255,255,0.1)' }} />
                         <div>
                             <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 13, letterSpacing: '0.2em', color: 'rgba(255,255,255,0.35)', textTransform: 'uppercase' }}>MSE Engenharia</div>
-                            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 32, fontWeight: 800, color: 'white', lineHeight: 1.1 }}>Visão por Obras</div>
+                            <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 'clamp(24px, 3vw, 32px)', fontWeight: 800, color: 'white', lineHeight: 1.1 }}>Visão por Obras</div>
                         </div>
                     </div>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
@@ -276,8 +278,10 @@
                         <Clock />
                     </div>
                 </div>
-                <div className="flex-1 overflow-y-auto custom-scrollbar px-10 pb-8 pt-6">
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {/* Alterados os paddings e classes da Grade para melhor adaptação de altura e largura */}
+                <div className="flex-1 overflow-y-auto custom-scrollbar px-6 md:px-10 pb-6 md:pb-8 pt-4 md:pt-6">
+                    {/* Alterado: Adicionados auto-rows-fr e breakpoints xl e 2xl para telas grandes */}
+                    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4 md:gap-6 auto-rows-fr h-full">
                         {obras.map((obra, index) => (
                             <ObraCard key={obra.nome} obra={obra} onClick={() => onSelectObra(index)} />
                         ))}
@@ -687,7 +691,7 @@
             }, IDLE_TIMEOUT);
         }, []);
 
-        /*useEffect(() => {
+        useEffect(() => {
             const events = ['mousemove', 'mousedown', 'keydown', 'touchstart', 'click'];
             const onActivity = () => {
                 setLoopAtivo(false);
@@ -699,7 +703,7 @@
                 events.forEach(ev => window.removeEventListener(ev, onActivity));
                 clearTimeout(idleRef.current);
             };
-        }, [resetIdle]);*/
+        }, [resetIdle]);
 
         useEffect(() => {
             setCurrentIdx(initialIdx);
@@ -1124,29 +1128,73 @@
             'ENTREGUE': { cor: '#10b981', label: 'Entregue' },
             'EM OBRA': { cor: '#10b981', label: 'Em Obra' },
             'COMPRADO': { cor: '#60a5fa', label: 'Comprado' },
-            'COMPRA PARCIAL': { cor: '#3b82f6', label: 'Compra Parc.' },
-            'ENTREGUE PARCIAL': { cor: '#f59e0b', label: 'Entr. Parc.' },
+            'COMPRA PARCIAL': { cor: '#3b82f6', label: 'Compra Parcial' },
+            'ENTREGUE PARCIAL': { cor: '#f59e0b', label: 'Entregue Parcial' },
             'EM APROVAÇÃO INTERNA': { cor: '#a78bfa', label: 'Em Aprovação' },
+            'EM APROVACAO INTERNA': { cor: '#a78bfa', label: 'Em Aprovação' }, 
             'EM COTAÇÃO': { cor: '#94a3b8', label: 'Em Cotação' },
+            'EM COTACAO': { cor: '#94a3b8', label: 'Em Cotação' },
         };
 
         const itens = obra.suprimentos || [];
         const total = itens.length;
-        const concluidos = itens.filter(it => it.status === 'ENTREGUE' || it.status === 'EM OBRA').length;
-        const pct = total > 0 ? Math.round((concluidos / total) * 100) : 0;
+        
+        const numEntregues = itens.filter(it => {
+            const st = String(it.status || '').toUpperCase().trim();
+            return st === 'ENTREGUE' || st === 'EM OBRA' || st === 'ENTREGUE PARCIAL';
+        }).length;
+        
+        const numComprados = itens.filter(it => {
+            const st = String(it.status || '').toUpperCase().trim();
+            return st === 'COMPRADO' || st === 'COMPRA PARCIAL';
+        }).length;
+        
+        const totalAvanco = numEntregues + numComprados;
+        const pctGlobal = total > 0 ? Math.round((totalAvanco / total) * 100) : 0;
+        const pctEntregue = total > 0 ? (numEntregues / total) * 100 : 0;
+        const pctComprado = total > 0 ? (numComprados / total) * 100 : 0;
 
         const pieSlices = useMemo(() => {
             const counts = {};
             itens.forEach(it => { counts[it.status] = (counts[it.status] || 0) + 1; });
-            return Object.keys(counts).map(s => ({
-                status: s, value: counts[s], cor: STATUS_CONFIG[s]?.cor || '#64748b', label: STATUS_CONFIG[s]?.label || s
-            })).sort((a,b) => b.value - a.value);
+            return Object.keys(counts).map(s => {
+                const config = STATUS_CONFIG[String(s).toUpperCase().trim()] || { cor: '#64748b', label: s };
+                return { status: s, value: counts[s], cor: config.cor, label: config.label };
+            }).sort((a,b) => b.value - a.value);
         }, [itens]);
 
         const itensExibidos = useMemo(() => {
             let filtrados = activeStatus ? itens.filter(it => it.status === activeStatus) : itens;
-            return filtrados.map(it => ({ ...it, _dias: diasRestantes(it.data_limite_obra) }))
-                            .sort((a,b) => (a._dias ?? 999) - (b._dias ?? 999));
+            return filtrados.map(it => {
+                const statusUp = String(it.status || '').toUpperCase().trim();
+                const isComprado = statusUp === 'COMPRADO' || statusUp === 'COMPRA PARCIAL';
+                const isEntregue = statusUp === 'ENTREGUE' || statusUp === 'EM OBRA' || statusUp === 'ENTREGUE PARCIAL';
+                const isPendente = !isEntregue && !isComprado;
+
+                let dateStr = '';
+                let dateLabel = '';
+                
+                if (isComprado) {
+                    dateStr = it.data_limite_obra || it.DATA_LIMITITE_OBRA;
+                    dateLabel = 'LIMITE EM OBRA'; // Alterado conforme solicitado
+                } else if (isPendente) {
+                    dateStr = it.data_limite_contratacao || it.DATA_LIMITITE_CONTRATACAO || it.data_limite_obra || it.DATA_LIMITITE_OBRA;
+                    dateLabel = 'CONTRATAÇÃO';
+                }
+
+                return { 
+                    ...it, 
+                    _dateStr: dateStr,
+                    _dateLabel: dateLabel,
+                    _dias: diasRestantes(dateStr),
+                    _statusKey: statusUp,
+                    _isEntregue: isEntregue
+                };
+            }).sort((a,b) => {
+                const valA = (a._dias === null || isNaN(a._dias)) ? 999 : a._dias;
+                const valB = (b._dias === null || isNaN(b._dias)) ? 999 : b._dias;
+                return valA - valB;
+            });
         }, [itens, activeStatus]);
 
         return (
@@ -1154,10 +1202,19 @@
                 
                 <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 16px', background: 'rgba(255,255,255,0.03)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.08)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                        <IconPin size={20} style={{ color: '#a78bfa' }} />
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"></path>
+                            <polyline points="3.27 6.96 12 12.01 20.73 6.96"></polyline>
+                            <line x1="12" y1="22.08" x2="12" y2="12"></line>
+                        </svg>
                         <div style={{ fontSize: 18, fontWeight: 700, color: 'white', fontFamily: "'Barlow Condensed'", textTransform: 'uppercase' }}>Mapa de Suprimentos</div>
                     </div>
-                    <button onClick={onScrollUp} style={{ background: 'rgba(255,255,255,0.05)', border: 'none', color: 'rgba(255,255,255,0.5)', padding: '6px 12px', borderRadius: 8, cursor: 'pointer', fontSize: 11, fontWeight: 700 }}>CURVA S ▲</button>
+                    <div style={{ display: 'flex', gap: 8 }}>
+                        <button onClick={onScrollUp} style={{ background: 'rgba(255,255,255,0.05)', border: 'none', color: 'rgba(255,255,255,0.5)', padding: '6px 12px', borderRadius: 8, cursor: 'pointer', fontSize: 11, fontWeight: 700 }}>CURVA S ▲</button>
+                        {hasEnc && (
+                            <button onClick={onScrollDown} style={{ background: 'rgba(255,255,255,0.05)', border: 'none', color: 'rgba(255,255,255,0.5)', padding: '6px 12px', borderRadius: 8, cursor: 'pointer', fontSize: 11, fontWeight: 700 }}>ENCARREGADOS ▼</button>
+                        )}
+                    </div>
                 </div>
 
                 <div style={{ flex: 1, display: 'flex', gap: 15, minHeight: 0, overflow: 'hidden' }}>
@@ -1186,16 +1243,24 @@
                     {/* DIREITA: KPIs e Lista */}
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12, minHeight: 0, overflow: 'hidden' }}>
                         <div style={{ flexShrink: 0, display: 'flex', gap: 10 }}>
-                            <div style={{ flex: 1, background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.1)', borderRadius: 15, padding: '12px 18px' }}>
-                                <div style={{ fontSize: 11, fontWeight: 700, color: '#10b981', textTransform: 'uppercase' }}>Entregues</div>
-                                <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
-                                    <div style={{ fontSize: 44, fontWeight: 800, color: 'white', fontFamily: "'Barlow Condensed'", lineHeight: 1 }}>{pct}%</div>
-                                    <div style={{ fontSize: 14, fontWeight: 700, color: 'rgba(255,255,255,0.25)', fontFamily: "'Barlow Condensed'" }}>({concluidos}/{total} itens)</div>
+                            <div style={{ flex: 1, background: 'rgba(59,130,246,0.05)', border: '1px solid rgba(59,130,246,0.1)', borderRadius: 15, padding: '12px 18px' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+                                    <div style={{ fontSize: 11, fontWeight: 700, color: '#60a5fa', textTransform: 'uppercase' }}>Avanço Global</div>
+                                    <div style={{ fontSize: 10, fontWeight: 700, color: 'rgba(255,255,255,0.4)' }}>
+                                        <span style={{color: '#10b981'}}>{numEntregues} Entregues</span> &nbsp;|&nbsp; <span style={{color: '#60a5fa'}}>{numComprados} Comprados</span>
+                                    </div>
                                 </div>
-                                <div style={{ height: 4, background: 'rgba(255,255,255,0.1)', borderRadius: 2, marginTop: 8 }}><div style={{ width: pct+'%', height: '100%', background: '#10b981' }} /></div>
+                                <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginTop: 4 }}>
+                                    <div style={{ fontSize: 44, fontWeight: 800, color: 'white', fontFamily: "'Barlow Condensed'", lineHeight: 1 }}>{pctGlobal}%</div>
+                                    <div style={{ fontSize: 14, fontWeight: 700, color: 'rgba(255,255,255,0.25)', fontFamily: "'Barlow Condensed'" }}>({totalAvanco}/{total} itens)</div>
+                                </div>
+                                <div style={{ height: 6, background: 'rgba(255,255,255,0.1)', borderRadius: 3, marginTop: 8, display: 'flex', overflow: 'hidden' }}>
+                                    <div style={{ width: pctEntregue + '%', height: '100%', background: '#10b981', transition: 'width 1s ease-in-out' }} title="Entregues" />
+                                    <div style={{ width: pctComprado + '%', height: '100%', background: '#60a5fa', transition: 'width 1s ease-in-out' }} title="Comprados" />
+                                </div>
                             </div>
                             {activeStatus && (
-                                <button onClick={() => setActiveStatus(null)} style={{ flex: 0.4, background: 'rgba(255,255,255,0.05)', border: '1px dashed rgba(255,255,255,0.2)', borderRadius: 15, color: 'white', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
+                                <button onClick={() => setActiveStatus(null)} style={{ flex: 0.3, background: 'rgba(255,255,255,0.05)', border: '1px dashed rgba(255,255,255,0.2)', borderRadius: 15, color: 'white', fontSize: 12, fontWeight: 700, cursor: 'pointer' }}>
                                     Limpar Filtro
                                 </button>
                             )}
@@ -1205,21 +1270,35 @@
                             <div style={{ flexShrink: 0, fontSize: 12, fontWeight: 700, color: 'rgba(255,255,255,0.3)', textTransform: 'uppercase' }}>
                                 {activeStatus ? `Filtro: ${activeStatus}` : 'Cronograma de Necessidades'}
                             </div>
-                            {/* AJUSTE FINAL: Container com overflow escondido e padding zerado no fim */}
                             <div style={{ flex: 1, overflowY: 'auto', paddingRight: 5, minHeight: 0 }} className="custom-scrollbar">
                                 <div style={{ 
                                     display: 'grid', 
                                     gridTemplateColumns: '1fr',
-                                    gridAutoRows: '60px', // Força cada linha a ter exatamente 60px
+                                    gridAutoRows: '60px',
                                     gap: '8px', 
-                                    paddingBottom: '8px' // Gap final para compensar o último item
+                                    paddingBottom: '8px'
                                 }}>
                                     {itensExibidos.map((it, i) => {
                                         const dias = it._dias;
-                                        const corStatus = STATUS_CONFIG[it.status]?.cor || '#64748b';
-                                        const isFinalizado = it.status === 'ENTREGUE' || it.status === 'EM OBRA';
-                                        const isAtrasado = !isFinalizado && dias !== null && dias < 0;
-                                        const corUrg = dias === null ? '#64748b' : dias < 0 ? '#ef4444' : dias < 15 ? '#f59e0b' : '#10b981';
+                                        const configStatus = STATUS_CONFIG[it._statusKey] || { cor: '#64748b', label: it.status || 'Pendente' };
+                                        
+                                        const isAtrasado = !it._isEntregue && dias !== null && !isNaN(dias) && dias < 0;
+                                        const dateObj = parseData(it._dateStr);
+
+                                        let desvioText = '';
+                                        let desvioCor = '';
+                                        if (!it._isEntregue && dias !== null && !isNaN(dias)) {
+                                            if (dias < 0) {
+                                                desvioText = `Atrasado ${Math.abs(dias)} dia${Math.abs(dias) > 1 ? 's' : ''}`;
+                                                desvioCor = '#ef4444';
+                                            } else if (dias === 0) {
+                                                desvioText = 'Vence hoje';
+                                                desvioCor = '#f59e0b';
+                                            } else {
+                                                desvioText = `No prazo (${dias} dia${dias > 1 ? 's' : ''})`;
+                                                desvioCor = '#10b981';
+                                            }
+                                        }
 
                                         return (
                                             <div key={i} className="obra-enter" style={{ 
@@ -1230,24 +1309,40 @@
                                                 border: isAtrasado ? '1px solid #ef4444' : '1px solid rgba(255,255,255,0.05)',
                                                 boxSizing: 'border-box'
                                             }}>
-                                                <div style={{ width: 45, textAlign: 'center', borderRight: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
-                                                    {isFinalizado ? (
-                                                        <div style={{ color: corStatus }}>
-                                                            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                                                {/* BOX DA DATA À ESQUERDA */}
+                                                <div style={{ width: 75, flexShrink: 0, textAlign: 'center', borderRight: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingRight: 10 }}>
+                                                    {it._isEntregue ? (
+                                                        <div style={{ color: '#10b981' }} title="Entregue">
+                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                                                         </div>
-                                                    ) : (
+                                                    ) : dateObj && !isNaN(dateObj) ? (
                                                         <>
-                                                            <div style={{ fontSize: 16, fontWeight: 800, color: corUrg, fontFamily: "'Barlow Condensed'", lineHeight: 1 }}>{dias ?? '--'}</div>
-                                                            <div style={{ fontSize: 7, color: 'rgba(255,255,255,0.2)', fontWeight: 700 }}>DIAS</div>
+                                                            <div style={{ fontSize: 18, fontWeight: 800, color: isAtrasado ? '#ef4444' : 'white', fontFamily: "'Barlow Condensed'", lineHeight: 1 }}>
+                                                                {String(dateObj.getDate()).padStart(2, '0')}/{String(dateObj.getMonth()+1).padStart(2, '0')}
+                                                            </div>
+                                                            <div style={{ fontSize: 7, color: 'rgba(255,255,255,0.3)', fontWeight: 800, marginTop: 4, lineHeight: 1, textTransform: 'uppercase' }}>{it._dateLabel}</div>
                                                         </>
+                                                    ) : (
+                                                        <div style={{ fontSize: 16, fontWeight: 800, color: 'rgba(255,255,255,0.2)', fontFamily: "'Barlow Condensed'" }}>--/--</div>
                                                     )}
                                                 </div>
-                                                <div style={{ flex: 1, minWidth: 0 }}>
+                                                
+                                                {/* INFORMAÇÕES DO ITEM E DESVIO */}
+                                                <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                                                     <div style={{ fontSize: 13, fontWeight: 700, color: 'white', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{it.fornecimento}</div>
-                                                    <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', fontWeight: 600 }}>{it.fornecedor || '-'}</div>
+                                                    <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>
+                                                        <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.4)', fontWeight: 600 }}>{it.fornecedor || '-'}</div>
+                                                        {desvioText && (
+                                                            <>
+                                                                <div style={{ width: 3, height: 3, borderRadius: '50%', background: 'rgba(255,255,255,0.2)' }} />
+                                                                <div style={{ fontSize: 10, color: desvioCor, fontWeight: 700 }}>{desvioText}</div>
+                                                            </>
+                                                        )}
+                                                    </div>
                                                 </div>
-                                                <div style={{ fontSize: 10, fontWeight: 700, color: corStatus, fontFamily: "'Barlow Condensed'", background: `${corStatus}15`, padding: '3px 7px', borderRadius: 6 }}>
-                                                    {STATUS_CONFIG[it.status]?.label}
+
+                                                <div style={{ fontSize: 10, fontWeight: 700, color: configStatus.cor, fontFamily: "'Barlow Condensed'", background: `${configStatus.cor}15`, border: `1px solid ${configStatus.cor}40`, padding: '3px 7px', borderRadius: 6, whiteSpace: 'nowrap' }}>
+                                                    {configStatus.label}
                                                 </div>
                                             </div>
                                         );
@@ -1261,6 +1356,7 @@
         );
     }
 
+    // Seção de encarregados
     // Seção de encarregados
     function LoopEncSection({ obra, desvioColor, onScrollUp }) {
         const { aggregatedData, topEncarregado, globalStats } = useMemo(() => {
@@ -1318,8 +1414,9 @@
                     <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 13, fontWeight: 700, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>
                         Performance de Encarregados
                     </div>
-                    <button onClick={onScrollUp} style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', gap: 6, fontSize: 11, color: 'rgba(255,255,255,0.35)', background: 'none', border: 'none', cursor: 'pointer', fontFamily: "'Barlow Condensed', sans-serif", letterSpacing: '0.1em' }}>
-                        <IconChevU size={14} /> CURVA S
+                    {/* Botão alterado: Apenas ícone de subir */}
+                    <button onClick={onScrollUp} title="Voltar para a seção acima" style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.05)', border: 'none', color: 'rgba(255,255,255,0.5)', padding: '6px 14px', borderRadius: 8, cursor: 'pointer', transition: 'all 0.2s' }}>
+                        <IconChevU size={16} />
                     </button>
                 </div>
                 {/* KPIs */}
@@ -1397,20 +1494,6 @@
         const [curvas, setCurvas]               = useState([]);
         const [suprimentos, setSuprimentos]     = useState([]);
 
-        // Match fuzzy: verifica se nomeObra está contido em nomeSupr ou vice-versa
-        // Lista combinada de obras (Com Mapeamento Exato DE/PARA)
-        // Lista combinada de obras (Mapeamento Exato + Leitura de CSV)
-        // Lista combinada de obras (Match Blindado por Códigos CP)
-        // Lista combinada de obras (Radar Duplo - Imune a espaços e formatações)
-        // Lista combinada de obras (Radar Duplo + Normalizador de CSV)
-        // Lista combinada de obras (Match Exato pelo Nome Limpo do Apps Script)
-        // Lista combinada de obras (Radar Imbatível - Sem acentos e sem firulas)
-        // Lista combinada de obras (Vredura Total de Propriedades)
-        // Lista combinada de obras (Mapeamento Direto + Normalização de Caracteres)
-        // Lista combinada de obras (Versão Final: Match por Partículas de Identidade)
-        // Lista combinada de obras (Versão de Elite: Match por ID Único)
-        // Lista combinada de obras com LOGS DE DIAGNÓSTICO
-        // Lista combinada de obras - Versão Final de Alta Precisão
         const obras = useMemo(() => {
             const map = {};
             
