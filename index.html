@@ -69,6 +69,24 @@
     const SLIDE_DURATION = 15000;
 
     // ============================================================================
+    // MAPA DE CPs POR OBRA
+    // ============================================================================
+    const OBRA_CP = {
+        "HITACHI":                   "CP022",
+        "PORTO":                     "CP002",
+        "NOVO NORDISK - UB SP":      "CP236",
+        "NOVO NORDISK - REFORÇO AP": "CP261",
+        "NOVO NORDISK - AP":         "CP273",
+        "CNPEM - AUDITÓRIO":         "CP040",
+        "CNPEM - FASEADO":           "CP029",
+    };
+
+    const nomeComCP = (nome) => {
+        const cp = OBRA_CP[nome];
+        return cp ? `${cp} - ${nome}` : nome;
+    };
+
+    // ============================================================================
     // ÍCONES
     // ============================================================================
     const Icon = ({ d, size=24, className="", style={} }) => (
@@ -127,7 +145,7 @@
     }
 
     // ============================================================================
-    // ECRÃ 1: GRELHA DE OBRAS (Substitui o menu de módulos)
+    // ECRÃ 1: GRELHA DE OBRAS
     // ============================================================================
     function useObraDesvio(obra) {
         return useMemo(() => {
@@ -157,8 +175,8 @@
         "CNPEM - FASEADO": "assets/images/cnpem-faseado.png",
         "NOVO NORDISK - REFORÇO AP": "assets/images/reforço.png",
         "PORTO": "assets/images/porto.png",
-		"NOVO NORDISK - AP": "assets/images/AP.png",
-		"NOVO NORDISK - UB SP": "assets/images/UB.png"
+        "NOVO NORDISK - AP": "assets/images/AP.png",
+        "NOVO NORDISK - UB SP": "assets/images/UB.png"
     };
 
     function ObraCard({ obra, onClick }) {
@@ -169,7 +187,7 @@
 
         React.useEffect(() => {
             const v = videoRef.current;
-            if (!v || isImage) return; 
+            if (!v || isImage) return;
             v.muted = true;
             v.play().catch(() => {});
         }, [mediaUrl, isImage]);
@@ -177,7 +195,7 @@
         const desvio = useObraDesvio(obra);
         const cor    = desvio === null ? '#64748b' : desvio >= 0 ? '#10b981' : desvio > -0.05 ? '#f59e0b' : '#ef4444';
         const corBg  = desvio === null ? 'rgba(100,116,139,' : desvio >= 0 ? 'rgba(16,185,129,' : desvio > -0.05 ? 'rgba(245,158,11,' : 'rgba(239,68,68,';
-        
+
         return (
             <div onClick={onClick} style={{
                 position: 'relative', borderRadius: 20, cursor: 'pointer', overflow: 'hidden',
@@ -204,20 +222,19 @@
 
                 <div style={{ position: 'absolute', left: 0, top: 0, bottom: 0, width: 5, background: cor, boxShadow: `0 0 12px ${cor}88`, zIndex: 2 }} />
 
-                {/* Ícone voltou para cima para melhor aproveitamento do novo tamanho */}
                 <div style={{ position: 'relative', zIndex: 2, color: cor, background: mediaUrl ? `${corBg}0.2)` : `${corBg}0.15)`, width: 44, height: 44, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, backdropFilter: mediaUrl ? 'blur(4px)' : 'none', border: mediaUrl ? `1px solid ${cor}33` : 'none' }}>
                     <IconPin size={22} />
                 </div>
-                
+
                 <div style={{ position: 'relative', zIndex: 2, flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                     <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 11, letterSpacing: '0.15em', color: mediaUrl ? 'rgba(255,255,255,0.7)' : 'rgba(255,255,255,0.4)', textTransform: 'uppercase', marginBottom: 2 }}>
                         {obra.encarregados ? 'Visão Integrada' : 'Curva S'}
                     </div>
                     <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 'clamp(20px, 2vw, 26px)', fontWeight: 800, color: 'white', lineHeight: 1.1, wordBreak: 'break-word', textTransform: 'uppercase', textShadow: mediaUrl ? '0 2px 12px rgba(0,0,0,0.9)' : 'none' }}>
-                        {obra.nome}
+                        {nomeComCP(obra.nome)}
                     </div>
                 </div>
-                
+
                 {desvio !== null && (
                     <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 6, marginTop: 'auto', paddingTop: 8 }}>
                         <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap', flex: 1 }}>
@@ -230,7 +247,7 @@
                         </div>
                     </div>
                 )}
-                
+
                 <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', gap: 6, color: cor, fontSize: 13, fontWeight: 600, marginTop: 4 }}>
                     <span>Acessar</span>
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5"><polyline points="9 18 15 12 9 6"/></svg>
@@ -268,14 +285,12 @@
                         <Clock />
                     </div>
                 </div>
-                
+
                 <div style={{ flex: 1, padding: '20px 32px', overflowY: 'auto' }} className="custom-scrollbar">
-                    {/* Largura ajustada para 280px e altura dinâmica. 
-                        Isso garante 4 cartões por linha e altura expandida. */}
                     <div style={{
                         display: 'grid',
                         gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                        gridAutoRows: 'minmax(250px, 1fr)', /* Força a altura dos cartões a preencher a tela */
+                        gridAutoRows: 'minmax(250px, 1fr)',
                         gap: '24px',
                         alignItems: 'stretch'
                     }}>
@@ -382,7 +397,6 @@
                 </defs>
                 <g transform={`translate(${pad.left},${pad.top})`}>
 
-                    {/* Grid horizontal */}
                     {yTicks.map((v, i) => (
                         <g key={i}>
                             <line x1={0} y1={yScale(v)} x2={W} y2={yScale(v)} stroke="rgba(255,255,255,0.05)" strokeWidth={1} />
@@ -390,38 +404,31 @@
                         </g>
                     ))}
 
-                    {/* Grid vertical */}
                     {xLabelIndices.map((xi, i) => (
                         <line key={i} x1={xScale(xi)} y1={0} x2={xScale(xi)} y2={H} stroke="rgba(255,255,255,0.03)" strokeWidth={1} />
                     ))}
 
-                    {/* Área Realizado */}
                     {pathFiltered('Realizado', idxHojeFloat !== undefined ? idxHojeFloat : idxHoje) && (
                         <path clipPath="url(#clipLines)"
                             d={pathFiltered('Realizado', idxHojeFloat !== undefined ? idxHojeFloat : idxHoje) + ' L ' + xScale(idxHojeFloat !== undefined ? idxHojeFloat : idxHoje) + ' ' + H + ' L 0 ' + H + ' Z'}
                             fill="url(#gradReal)" />
                     )}
 
-                    {/* Área Tendência */}
                     {pathAll('Tendencia') && (
                         <path clipPath="url(#clipLines)"
                             d={pathAll('Tendencia') + ' L ' + xScale(data.length-1) + ' ' + H + ' L ' + xScale(idxHoje >= 0 ? idxHoje : 0) + ' ' + H + ' Z'}
                             fill="url(#gradTend)" />
                     )}
 
-                    {/* Linha Previsto */}
                     <path clipPath="url(#clipLines)" d={pathAll('Previsto')} fill="none" stroke="#60a5fa" strokeWidth={2} strokeDasharray="8 4" strokeLinecap="round" opacity={0.7} />
 
-                    {/* Linha Realizado */}
                     <path clipPath="url(#clipLines)"
                         d={pathFiltered('Realizado', idxHojeFloat !== undefined ? idxHojeFloat : idxHoje)}
                         fill="none" stroke={lineColor} strokeWidth={3} strokeLinecap="round"
                         style={{ filter: 'drop-shadow(0 0 6px ' + lineColorFade + ')' }} />
 
-                    {/* Linha Tendência */}
                     <path clipPath="url(#clipLines)" d={pathAll('Tendencia')} fill="none" stroke="#64748b" strokeWidth={2} strokeDasharray="5 3" strokeLinecap="round" opacity={0.7} />
 
-                    {/* Linha vertical Hoje */}
                     {xHojeF !== null && (
                         <g>
                             <line x1={xHojeF} y1={0} x2={xHojeF} y2={H} stroke="rgba(255,255,255,0.25)" strokeWidth={1.5} strokeDasharray="4 3" />
@@ -429,12 +436,10 @@
                         </g>
                     )}
 
-                    {/* Ponto final Realizado */}
                     {idxHoje >= 0 && data[idxHoje]?.Realizado > 0 && (
                         <circle cx={xScale(idxHoje)} cy={yScale(data[idxHoje].Realizado)} r={5} fill={lineColor} style={{ filter: 'drop-shadow(0 0 6px ' + lineColor + ')' }} />
                     )}
 
-                    {/* Rótulos Realizado */}
                     {xLabelIndices.map((xi, i) => {
                         const d = data[xi];
                         if (!d.Realizado || d.Realizado <= 0 || xi > idxHoje) return null;
@@ -457,7 +462,6 @@
                         );
                     })}
 
-                    {/* Rótulos Previsto */}
                     {xLabelIndices.map((xi, i) => {
                         const d = data[xi];
                         if (!d.Previsto || d.Previsto <= 0 || xi <= idxHoje) return null;
@@ -476,7 +480,6 @@
                         );
                     })}
 
-                    {/* BARRAS SEMANAIS */}
                     <line x1={0} y1={barZoneY} x2={W} y2={barZoneY} stroke="rgba(255,255,255,0.06)" strokeWidth={1} />
                     <text x={-10} y={barZoneY + BAR_H / 2 + 4} textAnchor="end" fill="rgba(255,255,255,0.2)" fontSize={9} fontFamily="Barlow, sans-serif">sem.</text>
 
@@ -503,7 +506,6 @@
                         );
                     })}
 
-                    {/* Labels eixo X */}
                     {xLabelIndices.map((xi, i) => {
                         const d = data[xi], label = fmtDate(d.data) || ('S' + d.semana);
                         const x = xScale(xi), yLabel = barZoneY + BAR_H + 6;
@@ -515,7 +517,6 @@
                         );
                     })}
 
-                    {/* Eixos */}
                     <line x1={0} y1={0} x2={0} y2={H} stroke="rgba(255,255,255,0.08)" />
                     <line x1={0} y1={H} x2={W} y2={H} stroke="rgba(255,255,255,0.08)" />
                 </g>
@@ -547,7 +548,6 @@
         );
     }
 
-
     // ============================================================================
     // RANKING DE OBRAS
     // ============================================================================
@@ -559,7 +559,7 @@
             let totalDias = 0;
             for (let i = 0; i < 7; i++) {
                 const dL = new Date(seteDiasAtras); dL.setDate(seteDiasAtras.getDate() + i);
-                if (dL > ontem) break; // não conta dias além de ontem
+                if (dL > ontem) break;
                 if (dL.getDay() !== 0 && dL.getDay() !== 6) totalDias++;
             }
             totalDias = totalDias || 1;
@@ -625,6 +625,12 @@
                         <div key={o.nome} style={{ borderRadius: 18, padding: '18px 20px', position: 'relative', overflow: 'hidden', background: idx === 0 ? 'linear-gradient(135deg, rgba(245,158,11,0.18), rgba(245,158,11,0.05))' : 'linear-gradient(135deg, rgba(255,255,255,0.05), rgba(255,255,255,0.02))', border: '1px solid ' + cors[idx] + '44', boxShadow: idx === 0 ? '0 0 40px rgba(245,158,11,0.12)' : 'none' }}>
                             <div style={{ position: 'absolute', right: 12, top: 8, fontSize: 48, opacity: 0.15, lineHeight: 1 }}>{emoji[idx]}</div>
                             <div style={{ fontSize: 26, marginBottom: 6 }}>{emoji[idx]}</div>
+                            {/* CP badge no ranking top 3 */}
+                            {OBRA_CP[o.nome] && (
+                                <div style={{ display: 'inline-block', fontFamily: "'Barlow Condensed', sans-serif", fontSize: 11, fontWeight: 800, letterSpacing: '0.15em', color: cors[idx], background: `${cors[idx]}22`, border: `1px solid ${cors[idx]}44`, padding: '2px 8px', borderRadius: 6, marginBottom: 4 }}>
+                                    {OBRA_CP[o.nome]}
+                                </div>
+                            )}
                             <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: idx === 0 ? 24 : 20, fontWeight: 800, color: 'white', textTransform: 'uppercase', lineHeight: 1.1, marginBottom: 8 }}>{o.nome}</div>
                             <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: idx === 0 ? 46 : 38, fontWeight: 900, color: cors[idx], lineHeight: 1, marginBottom: 10 }}>{o.score.toFixed(1)}%</div>
                             <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap' }}>
@@ -641,8 +647,8 @@
                         <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
                             <thead style={{ background: '#0d1525' }}>
                                 <tr style={{ fontSize: 10, textTransform: 'uppercase', letterSpacing: '0.12em', color: 'rgba(255,255,255,0.3)', fontWeight: 700 }}>
-                                    {['Pos','Obra','Assiduidade','Aderência F.','Curva S','Score'].map((h, i) => (
-                                        <th key={h} style={{ padding: '10px 18px', textAlign: i > 1 ? 'right' : 'left' }}>{h}</th>
+                                    {['Pos','CP','Obra','Assiduidade','Aderência F.','Curva S','Score'].map((h, i) => (
+                                        <th key={h} style={{ padding: '10px 18px', textAlign: i > 2 ? 'right' : 'left' }}>{h}</th>
                                     ))}
                                 </tr>
                             </thead>
@@ -650,6 +656,13 @@
                                 {rest.map((o, idx) => (
                                     <tr key={o.nome} style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
                                         <td style={{ padding: '10px 18px' }}><span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 18, fontWeight: 800, color: 'rgba(255,255,255,0.2)' }}>#{idx + 4}</span></td>
+                                        <td style={{ padding: '10px 18px' }}>
+                                            {OBRA_CP[o.nome] && (
+                                                <span style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 12, fontWeight: 800, letterSpacing: '0.12em', color: '#94a3b8', background: 'rgba(148,163,184,0.12)', border: '1px solid rgba(148,163,184,0.2)', padding: '2px 7px', borderRadius: 5 }}>
+                                                    {OBRA_CP[o.nome]}
+                                                </span>
+                                            )}
+                                        </td>
                                         <td style={{ padding: '10px 18px', fontSize: 15, fontWeight: 700, color: 'white', textTransform: 'uppercase' }}>{o.nome}</td>
                                         <td style={{ padding: '10px 18px', textAlign: 'right', fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,0.6)' }}>{o.assiduidade.toFixed(1)}%</td>
                                         <td style={{ padding: '10px 18px', textAlign: 'right', fontSize: 14, fontWeight: 600, color: 'rgba(255,255,255,0.6)' }}>{o.aderencia.toFixed(1)}%</td>
@@ -668,13 +681,13 @@
     // ============================================================================
     // VISUALIZAÇÃO PRINCIPAL (DASHBOARD VIEWER)
     // ============================================================================
-    const IDLE_TIMEOUT = 5 * 60 * 1000; // 5 minutos
+    const IDLE_TIMEOUT = 5 * 60 * 1000;
 
     function DashboardViewer({ obras, initialIdx, onHome }) {
         const [currentIdx, setCurrentIdx] = useState(initialIdx);
         const [obraKey, setObraKey]       = useState(Date.now());
         const [loopAtivo, setLoopAtivo]   = useState(true);
-        const [sectionLoop, setSectionLoop] = useState(0); 
+        const [sectionLoop, setSectionLoop] = useState(0);
         const intervalRef                 = useRef(null);
         const idleRef                     = useRef(null);
         const scrollLoopRef               = useRef(null);
@@ -746,36 +759,27 @@
         }, [sectionLoop, obraKey]);
 
         useEffect(() => {
-    // Se o loop estiver desligado ou não houver obras, para tudo
-    if (!loopAtivo || obras.length === 0) {
-        if (intervalRef.current) clearInterval(intervalRef.current);
-        return;
-    }
-
-    // Limpa qualquer intervalo anterior antes de criar um novo
-    if (intervalRef.current) clearInterval(intervalRef.current);
-
-    const hasSupr = !!(obra?.suprimentos?.length);
-    const hasEnc  = !!(obra?.encarregados);
-    const maxSec  = (hasSupr ? 1 : 0) + (hasEnc ? 1 : 0);
-
-    intervalRef.current = setInterval(() => {
-        if (sectionLoop < maxSec) {
-            // Avança para a próxima sub-seção (Suprimentos ou Encarregados)
-            setSectionLoop(prev => prev + 1);
-        } else {
-            // Vai para a próxima obra e reseta a sub-seção
-            setCurrentIdx(prev => (prev + 1) % (obras.length + 1));
-            setObraKey(Date.now());
-            setSectionLoop(0);
-        }
-    }, SLIDE_DURATION);
-
-    return () => {
-        if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-    // Adicione 'obra' às dependências para que ele reavalie maxSec ao trocar de obra
-}, [loopAtivo, sectionLoop, obraKey, obras.length, obra]);
+            if (!loopAtivo || obras.length === 0) {
+                if (intervalRef.current) clearInterval(intervalRef.current);
+                return;
+            }
+            if (intervalRef.current) clearInterval(intervalRef.current);
+            const hasSupr = !!(obra?.suprimentos?.length);
+            const hasEnc  = !!(obra?.encarregados);
+            const maxSec  = (hasSupr ? 1 : 0) + (hasEnc ? 1 : 0);
+            intervalRef.current = setInterval(() => {
+                if (sectionLoop < maxSec) {
+                    setSectionLoop(prev => prev + 1);
+                } else {
+                    setCurrentIdx(prev => (prev + 1) % (obras.length + 1));
+                    setObraKey(Date.now());
+                    setSectionLoop(0);
+                }
+            }, SLIDE_DURATION);
+            return () => {
+                if (intervalRef.current) clearInterval(intervalRef.current);
+            };
+        }, [loopAtivo, sectionLoop, obraKey, obras.length, obra]);
 
         const parseVal = v => {
             if (v === null || v === undefined || v === '') return null;
@@ -858,7 +862,7 @@
                             <IconHome size={16} /> Menu
                         </button>
                         <div style={{ width: 1, height: 24, background: 'rgba(255,255,255,0.08)' }} />
-                        
+
                         <img src="assets/images/mselogo.png" alt="MSE Logo" style={{ height: '35px', width: 'auto', objectFit: 'contain' }} />
                         <div style={{ width: 1, height: 24, background: 'rgba(255,255,255,0.08)' }} />
 
@@ -881,6 +885,7 @@
                     </div>
                 </div>
 
+                {/* Barra de título da obra — com CP */}
                 <div style={{
                     flexShrink: 0, padding: '10px 20px',
                     background: 'linear-gradient(90deg, ' + desvioColor + '1a 0%, ' + desvioColor + '08 60%, transparent 100%)',
@@ -888,6 +893,14 @@
                     display: 'flex', alignItems: 'center', gap: 14,
                 }}>
                     <div style={{ width: 8, height: 8, borderRadius: '50%', background: desvioColor, boxShadow: '0 0 8px ' + desvioColor, flexShrink: 0 }} />
+
+                    {/* Badge CP na barra do viewer */}
+                    {!isRanking && obra && OBRA_CP[obra.nome] && (
+                        <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 13, fontWeight: 800, letterSpacing: '0.18em', color: desvioColor, background: `${desvioColor}20`, border: `1px solid ${desvioColor}50`, padding: '3px 10px', borderRadius: 7, flexShrink: 0 }}>
+                            {OBRA_CP[obra.nome]}
+                        </div>
+                    )}
+
                     <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 28, fontWeight: 800, color: 'white', letterSpacing: '0.04em', flex: 1, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', textTransform: 'uppercase' }}>
                         {isRanking ? 'Ranking de Obras' : (obra?.nome || '—')}
                     </div>
@@ -1043,14 +1056,12 @@
     // ============================================================================
     // SEÇÃO SUPRIMENTOS
     // ============================================================================
-
-    // Gráfico de pizza SVG interativo
     function PieChart({ slices, onSliceClick, activeStatus, containerWidth }) {
         const size = containerWidth ? Math.min(containerWidth, 400) : 360;
         const cx = 200, cy = 200;
         const r = 170;
         const total = slices.reduce((s, sl) => s + sl.value, 0);
-        
+
         if (total === 0) return null;
         let cumAngle = -Math.PI / 2;
 
@@ -1063,12 +1074,12 @@
             const offsetR = isActive ? 12 : 0;
             const ox = Math.cos(midAngle) * offsetR;
             const oy = Math.sin(midAngle) * offsetR;
-            
+
             const x1 = cx + ox + r * Math.cos(startAngle), y1 = cy + oy + r * Math.sin(startAngle);
             const x2 = cx + ox + r * Math.cos(cumAngle),   y2 = cy + oy + r * Math.sin(cumAngle);
             const largeArc = angle > Math.PI ? 1 : 0;
             const d = `M ${cx+ox} ${cy+oy} L ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2} Z`;
-            
+
             return { ...sl, d, isActive, angle, midAngle };
         });
 
@@ -1127,24 +1138,24 @@
             'COMPRA PARCIAL': { cor: '#3b82f6', label: 'Compra Parcial' },
             'ENTREGUE PARCIAL': { cor: '#f59e0b', label: 'Entregue Parcial' },
             'EM APROVAÇÃO INTERNA': { cor: '#a78bfa', label: 'Em Aprovação' },
-            'EM APROVACAO INTERNA': { cor: '#a78bfa', label: 'Em Aprovação' }, 
+            'EM APROVACAO INTERNA': { cor: '#a78bfa', label: 'Em Aprovação' },
             'EM COTAÇÃO': { cor: '#94a3b8', label: 'Em Cotação' },
             'EM COTACAO': { cor: '#94a3b8', label: 'Em Cotação' },
         };
 
         const itens = obra.suprimentos || [];
         const total = itens.length;
-        
+
         const numEntregues = itens.filter(it => {
             const st = String(it.status || '').toUpperCase().trim();
             return st === 'ENTREGUE' || st === 'EM OBRA' || st === 'ENTREGUE PARCIAL';
         }).length;
-        
+
         const numComprados = itens.filter(it => {
             const st = String(it.status || '').toUpperCase().trim();
             return st === 'COMPRADO' || st === 'COMPRA PARCIAL';
         }).length;
-        
+
         const totalAvanco = numEntregues + numComprados;
         const pctGlobal = total > 0 ? Math.round((totalAvanco / total) * 100) : 0;
         const pctEntregue = total > 0 ? (numEntregues / total) * 100 : 0;
@@ -1169,17 +1180,17 @@
 
                 let dateStr = '';
                 let dateLabel = '';
-                
+
                 if (isComprado) {
                     dateStr = it.data_limite_obra || it.DATA_LIMITITE_OBRA;
-                    dateLabel = 'LIMITE EM OBRA'; // Alterado conforme solicitado
+                    dateLabel = 'LIMITE EM OBRA';
                 } else if (isPendente) {
                     dateStr = it.data_limite_contratacao || it.DATA_LIMITITE_CONTRATACAO || it.data_limite_obra || it.DATA_LIMITITE_OBRA;
                     dateLabel = 'CONTRATAÇÃO';
                 }
 
-                return { 
-                    ...it, 
+                return {
+                    ...it,
                     _dateStr: dateStr,
                     _dateLabel: dateLabel,
                     _dias: diasRestantes(dateStr),
@@ -1195,7 +1206,7 @@
 
         return (
             <div ref={containerRef} className="obra-enter" style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '10px 20px', gap: 10, overflow: 'hidden' }}>
-                
+
                 <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '8px 16px', background: 'rgba(255,255,255,0.03)', borderRadius: 12, border: '1px solid rgba(255,255,255,0.08)' }}>
                     <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#a78bfa" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -1214,16 +1225,15 @@
                 </div>
 
                 <div style={{ flex: 1, display: 'flex', gap: 15, minHeight: 0, overflow: 'hidden' }}>
-                    
-                    {/* ESQUERDA: Pizza e Grade */}
+
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', background: 'rgba(255,255,255,0.01)', borderRadius: 18, border: '1px solid rgba(255,255,255,0.05)', padding: 15, minHeight: 0 }}>
                         <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: 0, overflow: 'hidden' }}>
                             <PieChart slices={pieSlices} onSliceClick={(st) => setActiveStatus(activeStatus === st ? null : st)} activeStatus={activeStatus} containerWidth={containerDim.w / 2} />
                         </div>
-                        
+
                         <div style={{ flexShrink: 0, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: 8, marginTop: 15 }}>
                             {pieSlices.map(sl => (
-                                <div key={sl.status} onClick={() => setActiveStatus(activeStatus === sl.status ? null : sl.status)} 
+                                <div key={sl.status} onClick={() => setActiveStatus(activeStatus === sl.status ? null : sl.status)}
                                      style={{ padding: '8px 12px', borderRadius: 10, cursor: 'pointer', transition: 'all 0.2s',
                                         background: activeStatus === sl.status ? `${sl.cor}22` : 'rgba(255,255,255,0.03)',
                                         border: `1px solid ${activeStatus === sl.status ? sl.cor : 'rgba(255,255,255,0.06)'}` }}>
@@ -1236,7 +1246,6 @@
                         </div>
                     </div>
 
-                    {/* DIREITA: KPIs e Lista */}
                     <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 12, minHeight: 0, overflow: 'hidden' }}>
                         <div style={{ flexShrink: 0, display: 'flex', gap: 10 }}>
                             <div style={{ flex: 1, background: 'rgba(59,130,246,0.05)', border: '1px solid rgba(59,130,246,0.1)', borderRadius: 15, padding: '12px 18px' }}>
@@ -1267,17 +1276,17 @@
                                 {activeStatus ? `Filtro: ${activeStatus}` : 'Cronograma de Necessidades'}
                             </div>
                             <div style={{ flex: 1, overflowY: 'auto', paddingRight: 5, minHeight: 0 }} className="custom-scrollbar">
-                                <div style={{ 
-                                    display: 'grid', 
+                                <div style={{
+                                    display: 'grid',
                                     gridTemplateColumns: '1fr',
                                     gridAutoRows: '60px',
-                                    gap: '8px', 
+                                    gap: '8px',
                                     paddingBottom: '8px'
                                 }}>
                                     {itensExibidos.map((it, i) => {
                                         const dias = it._dias;
                                         const configStatus = STATUS_CONFIG[it._statusKey] || { cor: '#64748b', label: it.status || 'Pendente' };
-                                        
+
                                         const isAtrasado = !it._isEntregue && dias !== null && !isNaN(dias) && dias < 0;
                                         const dateObj = parseData(it._dateStr);
 
@@ -1297,15 +1306,14 @@
                                         }
 
                                         return (
-                                            <div key={i} className="obra-enter" style={{ 
-                                                display: 'flex', alignItems: 'center', gap: 12, padding: '0 14px', 
-                                                height: '60px', 
-                                                background: isAtrasado ? 'rgba(239, 68, 68, 0.08)' : 'rgba(255,255,255,0.02)', 
-                                                borderRadius: 12, 
+                                            <div key={i} className="obra-enter" style={{
+                                                display: 'flex', alignItems: 'center', gap: 12, padding: '0 14px',
+                                                height: '60px',
+                                                background: isAtrasado ? 'rgba(239, 68, 68, 0.08)' : 'rgba(255,255,255,0.02)',
+                                                borderRadius: 12,
                                                 border: isAtrasado ? '1px solid #ef4444' : '1px solid rgba(255,255,255,0.05)',
                                                 boxSizing: 'border-box'
                                             }}>
-                                                {/* BOX DA DATA À ESQUERDA */}
                                                 <div style={{ width: 75, flexShrink: 0, textAlign: 'center', borderRight: '1px solid rgba(255,255,255,0.05)', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', paddingRight: 10 }}>
                                                     {it._isEntregue ? (
                                                         <div style={{ color: '#10b981' }} title="Entregue">
@@ -1322,8 +1330,7 @@
                                                         <div style={{ fontSize: 16, fontWeight: 800, color: 'rgba(255,255,255,0.2)', fontFamily: "'Barlow Condensed'" }}>--/--</div>
                                                     )}
                                                 </div>
-                                                
-                                                {/* INFORMAÇÕES DO ITEM E DESVIO */}
+
                                                 <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
                                                     <div style={{ fontSize: 13, fontWeight: 700, color: 'white', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{it.fornecimento}</div>
                                                     <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 2 }}>
@@ -1352,8 +1359,9 @@
         );
     }
 
-    // Seção de encarregados
-    // Seção de encarregados
+    // ============================================================================
+    // SEÇÃO ENCARREGADOS
+    // ============================================================================
     function LoopEncSection({ obra, desvioColor, onScrollUp }) {
         const { aggregatedData, topEncarregado, globalStats } = useMemo(() => {
             if (!obra?.encarregados?.data) return { aggregatedData: [], topEncarregado: null, globalStats: { meta: 0, avanco: 0 } };
@@ -1373,23 +1381,21 @@
                 supervisorMap[resp].metaTotal += meta; supervisorMap[resp].avancoTotal += avanco;
                 if (dataYMD) supervisorMap[resp].diasApontados.add(dataYMD);
             });
-            // Denominador: dias do período (seteDiasAtras até ontem inclusive) que não são fim de semana
             let totalDias = 0;
             for (let i = 0; i < 7; i++) {
                 const d = new Date(seteDiasAtras); d.setDate(seteDiasAtras.getDate() + i);
-                if (d > ontem) break; // não conta dias além de ontem
+                if (d > ontem) break;
                 if (d.getDay() !== 0 && d.getDay() !== 6) totalDias++;
             }
             totalDias = totalDias || 1;
             const arr = Object.values(supervisorMap).map(s => {
                 const aderencia = s.metaTotal > 0 ? (s.avancoTotal / s.metaTotal) * 100 : 0;
-                // Numerador: dias apontados; se apontou num domingo ou sábado, conta no numerador E no denominador
                 let diasNumerador = 0;
                 let denominadorExtra = 0;
                 s.diasApontados.forEach(dataYMD => {
                     const dt = new Date(dataYMD + 'T12:00:00');
                     diasNumerador++;
-                    if (dt.getDay() === 0 || dt.getDay() === 6) denominadorExtra++; // domingo ou sábado com apontamento entra no denom
+                    if (dt.getDay() === 0 || dt.getDay() === 6) denominadorExtra++;
                 });
                 const assiduidade = (diasNumerador / (totalDias + denominadorExtra)) * 100;
                 const score = (aderencia * 0.15) + (assiduidade * 0.85);
@@ -1404,18 +1410,15 @@
 
         return (
             <div style={{ height: '100%', display: 'flex', flexDirection: 'column', padding: '6px 20px 10px', gap: 10 }}>
-                {/* Título */}
                 <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center', gap: 12, padding: '8px 14px', background: 'rgba(245,158,11,0.08)', border: '1px solid rgba(245,158,11,0.18)', borderRadius: 12 }}>
                     <IconTrophy size={16} style={{ color: '#f59e0b' }} />
                     <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 13, fontWeight: 700, letterSpacing: '0.12em', color: 'rgba(255,255,255,0.5)', textTransform: 'uppercase' }}>
                         Performance de Encarregados
                     </div>
-                    {/* Botão alterado: Apenas ícone de subir */}
                     <button onClick={onScrollUp} title="Voltar para a seção acima" style={{ marginLeft: 'auto', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'rgba(255,255,255,0.05)', border: 'none', color: 'rgba(255,255,255,0.5)', padding: '6px 14px', borderRadius: 8, cursor: 'pointer', transition: 'all 0.2s' }}>
                         <IconChevU size={16} />
                     </button>
                 </div>
-                {/* KPIs */}
                 <div style={{ flexShrink: 0, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 10, height: 100 }}>
                     <div style={{ background: 'linear-gradient(135deg, #f59e0b, #d97706)', borderRadius: 14, padding: '10px 16px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', position: 'relative', overflow: 'hidden' }}>
                         <IconTrophy size={70} style={{ position: 'absolute', right: -10, bottom: -10, color: 'rgba(255,255,255,0.12)' }} />
@@ -1440,7 +1443,6 @@
                         <div style={{ fontFamily: "'Barlow Condensed', sans-serif", fontSize: 42, fontWeight: 900, color: '#10b981', lineHeight: 1 }}>{assiduidadeGlobal.toFixed(1)}%</div>
                     </div>
                 </div>
-                {/* Tabela */}
                 <div style={{ flex: 1, minHeight: 0, borderRadius: 14, overflow: 'hidden', display: 'flex', flexDirection: 'column', background: 'rgba(255,255,255,0.02)', border: '1px solid rgba(255,255,255,0.06)' }}>
                     <div style={{ overflowY: 'auto', flex: 1 }} className="custom-scrollbar">
                         <table style={{ width: '100%', textAlign: 'left', borderCollapse: 'collapse' }}>
@@ -1492,17 +1494,16 @@
 
         const obras = useMemo(() => {
             const map = {};
-            
-            curvas.forEach(c => { 
-                if (!map[c.nome]) map[c.nome] = { nome: c.nome, curva: null, encarregados: null, suprimentos: [] }; 
-                map[c.nome].curva = c; 
+
+            curvas.forEach(c => {
+                if (!map[c.nome]) map[c.nome] = { nome: c.nome, curva: null, encarregados: null, suprimentos: [] };
+                map[c.nome].curva = c;
             });
-            encarregados.forEach(e => { 
-                if (!map[e.nome]) map[e.nome] = { nome: e.nome, curva: null, encarregados: null, suprimentos: [] }; 
-                map[e.nome].encarregados = e; 
+            encarregados.forEach(e => {
+                if (!map[e.nome]) map[e.nome] = { nome: e.nome, curva: null, encarregados: null, suprimentos: [] };
+                map[e.nome].encarregados = e;
             });
 
-            // Função para remover acentos e símbolos para uma comparação limpa
             const limparParaMatch = (str) => {
                 return String(str || "")
                     .toUpperCase()
@@ -1517,15 +1518,13 @@
 
                 Object.keys(map).forEach(nomeObraNoPainel => {
                     const painelLimpo = limparParaMatch(nomeObraNoPainel);
-                    
-                    // Bloqueio de segurança para Reforço e Porto
+
                     if (painelLimpo.includes('REFORCO') || painelLimpo.includes('PORTO')) {
                         if (!nomeGrupoLimpo.includes('REFORCO') && !nomeGrupoLimpo.includes('PORTO')) return;
                     }
 
                     let match = false;
 
-                    // Comparação simplificada e imune a acentos/espaços/barras
                     if (nomeGrupoLimpo.includes('UBS P') || nomeGrupoLimpo.includes('UB/SP') || (nomeGrupoLimpo.includes('UB') && painelLimpo.includes('UB'))) match = true;
                     else if (nomeGrupoLimpo.includes('AP') && painelLimpo.includes('AP') && !painelLimpo.includes('REFORCO')) match = true;
                     else if (nomeGrupoLimpo.includes('HITACHI') && painelLimpo.includes('HITACHI')) match = true;
@@ -1540,7 +1539,7 @@
                             itemFormatado.fornecedor = it.fornecedor || it.FORNECEDOR || '-';
                             itemFormatado.data_limite_obra = it.data_limite_obra || it.DATA_LIMITE_OBRA || '';
                             itemFormatado.data_entrega_fornecedor = it.data_entrega_fornecedor || it.DATA_ENTREGA_FORNECEDOR || '';
-                            
+
                             map[nomeObraNoPainel].suprimentos.push(itemFormatado);
                         });
                     }
@@ -1594,11 +1593,11 @@
 
                 {screen === 'grid' && (
                     <div className="screen-enter">
-                        <ObrasGridScreen 
-                            obras={obras} 
-                            onSelectObra={(idx) => { 
-                                setInitialIdx(idx); 
-                                setScreen('viewer'); 
+                        <ObrasGridScreen
+                            obras={obras}
+                            onSelectObra={(idx) => {
+                                setInitialIdx(idx);
+                                setScreen('viewer');
                             }}
                             onOpenRanking={() => {
                                 setInitialIdx(obras.length);
@@ -1610,10 +1609,10 @@
 
                 {screen === 'viewer' && (
                     <div className="screen-enter" style={{ height: '100vh' }}>
-                        <DashboardViewer 
-                            obras={obras} 
+                        <DashboardViewer
+                            obras={obras}
                             initialIdx={initialIdx}
-                            onHome={() => setScreen('grid')} 
+                            onHome={() => setScreen('grid')}
                         />
                     </div>
                 )}
